@@ -1,0 +1,4 @@
+#!/bin/bash
+jupyter notebook --notebook-dir=/home/vagrant/py_dev/notebooks \
+--no-browser --ip=0.0.0.0 \
+--NotebookApp.token='' --debug > debug.log 2>&1 &
