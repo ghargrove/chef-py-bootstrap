@@ -10,6 +10,25 @@ deps.each do |i|
     package i
 end
 
+## Download & install anaconda
+remote_file '/home/vagrant/anaconda.sh' do
+  source node['anaconda']['url']
+  owner 'vagrant'
+  group 'vagrant'
+  mode  0777
+end
+
+execute 'Install anaconda' do
+  cwd '/home/vagrant'
+  command '/bin/bash anaconda.sh -b -p /home/vagrant/anaconda3'
+  not_if 'type anaconda >/dev/null 2>&1'
+end
+
+execute 'update-bashrc' do
+  command %(echo 'export PATH="/home/vagrant/anaconda3/bin:$PATH"' >> /home/vagrant/.bashrc)
+  not_if 'type anaconda >/dev/null 2>&1'
+end
+
 ## Setup the requirements file
 cookbook_file '/home/vagrant/requirements.txt' do
     source 'requirements.txt'
@@ -18,27 +37,19 @@ cookbook_file '/home/vagrant/requirements.txt' do
     mode   0664
 end
 
-## Install py
-python_runtime '3'
-
-python_virtualenv '/home/vagrant/py_dev' do
-    user  'vagrant'
-    group 'vagrant'
+execute 'conda-install' do
+  command '/home/vagrant/anaconda3/bin/conda install --file /home/vagrant/requirements.txt'
 end
 
-pip_requirements '/home/vagrant/requirements.txt' do
-    cwd '/home/vagrant/py_dev'
-    virtualenv '/home/vagrant/py_dev'
-end
-
-cookbook_file '/home/vagrant/py_dev/jupyter' do
+## Setup a notebook environment
+cookbook_file '/home/vagrant/jupyter' do
     source 'jupyter.txt'
     owner 'vagrant'
     group 'vagrant'
     mode 0774
 end
 
-directory '/home/vagrant/py_dev/notebooks' do
+directory '/home/vagrant/notebooks' do
     owner 'vagrant'
     group 'vagrant'
     mode 0775

@@ -1,13 +1,4 @@
-numpy
-scipy
-matplotlib
-pandas
 quandl
-sklearn
 pandas-datareader
 html5lib
-lxml
-bs4
-openpyxl
-ipython[notebook]
 Django

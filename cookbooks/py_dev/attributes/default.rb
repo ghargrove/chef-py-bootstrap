@@ -1,4 +1,3 @@
 ## Python attributes
 
-default['poise-python']['install_python2'] = false
-default['poise-python']['install_python3'] = true
+default['anaconda']['url'] = 'https://repo.continuum.io/archive/Anaconda3-4.3.1-Linux-x86_64.sh'
